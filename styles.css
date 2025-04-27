@@ -1,7 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Cal+Sans:wght@400;700&display=swap');
+
 body {
-    font-family: 'Arial', sans-serif;
+    font-family: 'Cal Sans', sans-serif;
     text-align: center;
-    background-color: #e0f7fa;
+    background: linear-gradient(135deg, #e0f7fa, #80deea); /* Vibrant gradient background */
     overflow: hidden;
 }
 
@@ -9,7 +11,7 @@ body {
     position: relative;
     width: 50%; /* Width of the game area */
     max-width: 600px; /* Optional: maximum width for larger screens */
-    height: 550px;
+    height: 530px;
     border: 2px solid rgba(0, 121, 107, 0.8); /* Semi-transparent border */
     overflow: hidden;
     background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
@@ -23,34 +25,79 @@ body {
     position: absolute;
     bottom: 10px;
     left: 50%;
-    width: 100px;
-    height: 50px;
-    background: linear-gradient(135deg, #ff8f00, #ffca28); /* Gradient background */
-    border-radius: 10px;
+    width: 120px;
+    height: 60px;
+    background: linear-gradient(135deg, #00796b, #004d40); /* Match the rest of the game */
+    border-radius: 15px 15px 0 0; /* Rounded top corners for a basket-like appearance */
     transform: translateX(-50%);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); /* Shadow for depth */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); /* Enhanced shadow for more depth */
+    border: 2px solid rgba(255, 255, 255, 0.5); /* Subtle border for a polished look */
+    overflow: hidden; /* Ensure inner elements don't overflow */
+    transition: left 0.1s ease, transform 0.2s ease; /* Smooth transition for position and scale */
+}
+
+#basket::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    width: 80px;
+    height: 10px;
+    background: linear-gradient(135deg, #00796b, #004d40); /* Match basket color */
+    border-radius: 5px; /* Rounded edges for the handle */
+    transform: translateX(-50%);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); /* Subtle shadow for depth */
 }
 
 .fruit {
     position: absolute;
     width: 50px;
     height: 50px;
-    background-color: rgba(244, 67, 54, 0.9); /* Semi-transparent fruit color */
-    border-radius: 50%;
     animation: fall linear;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* Shadow for depth */
+}
+
+.scoreboard {
+    display: flex;
+    justify-content: space-between;;
+    padding: 20px;
 }
 
 #score {
     font-size: 24px;
     color: #00796b; /* Modern color for the score */
-    margin-top: 20px;
     text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.7); /* Soft shadow for text */
 }
 
 #high-score {
     font-size: 24px;
     color: #00796b; /* Modern color for the high score */
-    margin-top: 10px;
     text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.7); /* Soft shadow for text */
+}
+
+#controls {
+    margin-top: 20px;
+    display: flex; /* Use flexbox for alignment */
+    justify-content: center; /* Center the buttons */
+}
+
+button {
+    padding: 15px 25px;
+    font-size: 18px;
+    margin: 0 10px;
+    cursor: pointer;
+    border: none;
+    border-radius: 25px; /* More rounded corners for a modern look */
+    background: linear-gradient(135deg, #00796b, #004d40); /* Gradient background */
+    color: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+    transition: transform 0.2s, background 0.3s; /* Smooth transitions */
+}
+
+button:hover {
+    background: linear-gradient(135deg, #004d40, #00796b); /* Reverse gradient on hover */
+    transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+button:hover {
+    background-color: #005b4f; /* Darker shade on hover */
 }
