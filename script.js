@@ -24,7 +24,7 @@ function createFruit() {
 // Function to fall the fruit
 function fallFruit(fruit) {
     fruit.animate([{ transform: 'translateY(0)' }, { transform: 'translateY(500px)' }], {
-        duration: 3000,
+        duration: 9000,
         easing: 'linear',
         fill: 'forwards'
     });
