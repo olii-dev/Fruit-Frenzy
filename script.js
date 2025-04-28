@@ -6,15 +6,14 @@ const leftButton = document.getElementById('left-button');
 const rightButton = document.getElementById('right-button');
 
 let score = 0;
-let highScore = localStorage.getItem('highScore') ? parseInt(localStorage.getItem('highScore')) : 0; // Retrieve high score from local storage
-let basketPosition = gameArea.clientWidth / 2 - 50; // Center the basket
+let highScore = localStorage.getItem('highScore') ? parseInt(localStorage.getItem('highScore')) : 0;
+let basketPosition = gameArea.clientWidth / 2 - 50;
 let currentFruit;
-let gameActive = true; // Track whether the game is active
+let gameActive = true;
 
-// Function to create a fruit
 function createFruit() {
     if (currentFruit) {
-        currentFruit.remove(); // Remove the previous fruit
+        currentFruit.remove();
     }
     currentFruit = document.createElement('div');
     currentFruit.className = 'fruit';
@@ -24,7 +23,8 @@ function createFruit() {
     fallFruit(currentFruit);
 }
 
-// Function to fall the fruit
+const hitSound = document.getElementById('hit-sound');
+
 function fallFruit(fruit) {
     fruit.animate([{ transform: 'translateY(0)' }, { transform: 'translateY(500px)' }], {
         duration: 4700,
@@ -41,32 +41,34 @@ function fallFruit(fruit) {
             fruitRect.left + fruitRect.width >= basketRect.left &&
             fruitRect.left <= basketRect.left + basketRect.width
         ) {
+            hitSound.play();
             score++;
             scoreDisplay.textContent = `Score: ${score}`;
-            updateHighScore(); // Check and update high score
+            updateHighScore();
             clearInterval(checkCollision);
-            createFruit(); // Create a new fruit after catching
+            createFruit();
         } else if (fruitRect.top > gameArea.clientHeight) {
             clearInterval(checkCollision);
-            gameOver(); // End the game if the fruit is missed
+            gameOver();
         }
     }, 50);
 }
 
-// Function to update high score
 function updateHighScore() {
     if (score > highScore) {
         highScore = score;
-        localStorage.setItem('highScore', highScore); // Save new high score to local storage
-        highScoreDisplay.textContent = `High Score: ${highScore}`; // Update high score display
+        localStorage.setItem('highScore', highScore);
+        highScoreDisplay.textContent = `High Score: ${highScore}`;
     }
 }
 
-// Function to handle game over
-function gameOver() {
-    gameActive = false; // Set game to inactive
+const gameOverSound = document.getElementById('game-over-sound');
 
-    // Create a popup overlay
+function gameOver() {
+    gameActive = false;
+
+    gameOverSound.play();
+
     const popupOverlay = document.createElement('div');
     popupOverlay.id = 'game-over-overlay';
     popupOverlay.style.position = 'fixed';
@@ -81,7 +83,6 @@ function gameOver() {
     popupOverlay.style.alignItems = 'center';
     popupOverlay.style.zIndex = '1000';
 
-    // Create a popup message
     const popupMessage = document.createElement('div');
     popupMessage.style.color = 'white';
     popupMessage.style.fontSize = '24px';
@@ -89,7 +90,6 @@ function gameOver() {
     popupMessage.style.marginBottom = '20px';
     popupMessage.innerHTML = `Game Over!<br>Your score was ${score}.`;
 
-    // Create a restart button
     const restartButton = document.createElement('button');
     restartButton.textContent = 'Play again!';
     restartButton.style.padding = '10px 20px';
@@ -100,29 +100,24 @@ function gameOver() {
     restartButton.style.backgroundColor = '#28a745';
     restartButton.style.color = 'white';
 
-    // Restart button click event
     restartButton.addEventListener('click', () => {
         document.body.removeChild(popupOverlay);
         resetGame();
     });
 
-    // Append message and button to the overlay
     popupOverlay.appendChild(popupMessage);
     popupOverlay.appendChild(restartButton);
 
-    // Append the overlay to the body
     document.body.appendChild(popupOverlay);
 }
 
-// Function to reset the game
 function resetGame() {
-    score = 0; // Reset score
-    scoreDisplay.textContent = `Score: ${score}`; // Update score display
-    createFruit(); // Create the first fruit again
-    gameActive = true; // Set game to active
+    score = 0;
+    scoreDisplay.textContent = `Score: ${score}`;
+    createFruit();
+    gameActive = true;
 }
 
-// Function to get random fruit color
 function getRandomFruitColor() {
     const colors = [
         'images/watermelon.png',
@@ -143,9 +138,8 @@ function getRandomFruitColor() {
     currentFruit.appendChild(fruitImage);
 }
 
-// Move basket with 'A', 'D', left arrow, and right arrow keys
 document.addEventListener('keydown', (event) => {
-    if (!gameActive) return; // Prevent movement if game is over
+    if (!gameActive) return;
 
     if (event.key === 'a' || event.key === 'A' || event.key === 'ArrowLeft') {
         if (basketPosition > 0) {
@@ -160,23 +154,40 @@ document.addEventListener('keydown', (event) => {
     }
 });
 
-// Move basket with buttons
-leftButton.addEventListener('click', () => {
-    if (basketPosition > 0) {
-        basketPosition -= 20;
-        basket.style.left = basketPosition + 'px';
+let moveLeftInterval, moveRightInterval;
+
+leftButton.addEventListener('touchstart', () => {
+    if (!moveLeftInterval) {
+        moveLeftInterval = setInterval(() => {
+            if (basketPosition > 0) {
+                basketPosition -= 10;
+                basket.style.left = basketPosition + 'px';
+            }
+        }, 50);
     }
 });
 
-rightButton.addEventListener('click', () => {
-    if (basketPosition < gameArea.clientWidth - 100) {
-        basketPosition += 20;
-        basket.style.left = basketPosition + 'px';
+leftButton.addEventListener('touchend', () => {
+    clearInterval(moveLeftInterval);
+    moveLeftInterval = null;
+});
+
+rightButton.addEventListener('touchstart', () => {
+    if (!moveRightInterval) {
+        moveRightInterval = setInterval(() => {
+            if (basketPosition < gameArea.clientWidth - 100) {
+                basketPosition += 10;
+                basket.style.left = basketPosition + 'px';
+            }
+        }, 50);
     }
 });
 
-// Start the game
-createFruit(); // Create the first fruit
+rightButton.addEventListener('touchend', () => {
+    clearInterval(moveRightInterval);
+    moveRightInterval = null;
+});
 
-// Initialize high score display
+createFruit();
+
 highScoreDisplay.textContent = `High Score: ${highScore}`;
