@@ -128,7 +128,12 @@ function getRandomFruitColor() {
         'images/strawberry.png',
         'images/pear.png',
         'images/orange.png',
-        'images/lemon.png'
+        'images/lemon.png',
+        'images/cherry.png',
+        'images/plum.png',
+        'images/grape.png',
+        'images/peach.png',
+        'images/black-berry.png'
     ];
     const fruitImage = document.createElement('img');
     const selectedColor = colors[Math.floor(Math.random() * colors.length)];

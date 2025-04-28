@@ -103,16 +103,16 @@ button:hover {
     background-color: #005b4f;
 }
 
-@media (min-width: 1024px) {
-    #left-button,
-    #right-button {
-        display: none;
-    }
+/* Hide the left and right buttons by default */
+#left-button, #right-button {
+    display: none;
 }
 
-@media (max-width: 1023px) {
-    #left-button,
-    #right-button {
+/* Show the buttons on mobile devices and iPads */
+@media (max-width: 1023px), 
+       (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait), 
+       (min-device-width: 1024px) and (max-device-width: 1366px) and (orientation: landscape) {
+    #left-button, #right-button {
         display: inline-block;
     }
 }
